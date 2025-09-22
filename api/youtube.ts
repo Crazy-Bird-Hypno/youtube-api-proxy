@@ -1,11 +1,11 @@
-// Der Inhalt für Ihre neue Datei: api/youtube.ts
-
+// De// In der Datei: /api/youtube.ts
 export const config = { runtime: 'edge' };
 
 export default async function handler(request: Request) {
   const { searchParams } = new URL(request.url);
   const videoId = searchParams.get('videoId');
-  const apiKey = process.env.YOUTUBE_API_KEY; // Sicher aus Umgebungsvariablen geladen
+  // Sicher aus Vercel Umgebungsvariablen geladen
+  const apiKey = process.env.YOUTUBE_API_KEY;
 
   if (!videoId) {
     return new Response(JSON.stringify({ error: 'videoId ist erforderlich' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
@@ -18,6 +18,9 @@ export default async function handler(request: Request) {
 
   try {
     const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`YouTube API antwortete mit Status: ${response.status}`);
+    }
     const data = await response.json();
 
     if (data.items?.length > 0) {
@@ -27,6 +30,7 @@ export default async function handler(request: Request) {
       return new Response(JSON.stringify({ error: 'Video nicht gefunden' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
     }
   } catch (error) {
+    console.error("Fehler im API-Proxy:", error);
     return new Response(JSON.stringify({ error: 'Fehler beim Abrufen von der YouTube-API' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }
