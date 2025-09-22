@@ -130,9 +130,10 @@ export async function analyzeVideoContent(
         },
     });
 
+    // Per Gemini API documentation, when responseMimeType is "application/json",
+    // response.text provides a clean JSON string.
     const jsonString = response.text.trim();
-    const cleanedJson = jsonString.replace(/^```json\n?/, '').replace(/\n?```$/, '');
-    const parsedData = JSON.parse(cleanedJson);
+    const parsedData = JSON.parse(jsonString);
 
     if (!parsedData.summary || !parsedData.chapters || !Array.isArray(parsedData.chapters)) {
         throw new Error("Ungültige Datenstruktur von der API empfangen.");
