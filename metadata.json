@@ -1,0 +1,5 @@
+{
+  "name": "YouTube Video Analyzer",
+  "description": "An application to analyze YouTube videos, providing summaries, chapter breakdowns, and transcriptions for selected sections. Generated content can be copied in Markdown format for use in note-taking apps like Obsidian.",
+  "requestFramePermissions": []
+}
