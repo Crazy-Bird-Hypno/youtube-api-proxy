@@ -1,4 +1,4 @@
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI, Type, GenerateContentResponse } from "@google/genai";
 import { AnalysisData, Chapter, VideoInfo } from '../types';
 
 let ai: GoogleGenAI | null = null;
@@ -121,7 +121,8 @@ export async function analyzeVideoContent(
 
   try {
     const localAi = getAiClient();
-    const response = await localAi.models.generateContent({
+    // FIX: Explicitly type the response for clarity and type safety.
+    const response: GenerateContentResponse = await localAi.models.generateContent({
         model: "gemini-2.5-flash",
         contents: contents,
         config: {
@@ -132,6 +133,7 @@ export async function analyzeVideoContent(
 
     // Per Gemini API documentation, when responseMimeType is "application/json",
     // response.text provides a clean JSON string.
+    // FIX: According to the JSON response guidelines, trim the text to handle potential whitespace.
     const jsonString = response.text.trim();
     const parsedData = JSON.parse(jsonString);
 
@@ -157,7 +159,8 @@ Formatieren Sie die Ausgabe als Markdown, das für Obsidian geeignet ist. Jedes 
 
     try {
         const localAi = getAiClient();
-        const response = await localAi.models.generateContent({
+        // FIX: Explicitly type the response for clarity and type safety.
+        const response: GenerateContentResponse = await localAi.models.generateContent({
             model: "gemini-2.5-flash",
             contents: prompt,
         });
